@@ -1,7 +1,7 @@
 
 # Replace these with your actual credentials (or use environment variables for safety)
-LINKEDIN_USERNAME = "your_email@example.com"
-LINKEDIN_PASSWORD = "your_password"
+LINKEDIN_USERNAME = "rajkumarmaurya190@gmail.com"
+LINKEDIN_PASSWORD = "Kumar@7052"
 
-NAUKRI_USERNAME = "your_naukri_email@example.com"
-NAUKRI_PASSWORD = "your_naukri_password"
+NAUKRI_USERNAME = "rajkumarmaurya190@gmail.com"
+NAUKRI_PASSWORD = "Kumar@7052"

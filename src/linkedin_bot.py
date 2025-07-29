@@ -11,18 +11,28 @@ class LinkedInBot:
     def search_and_apply(self, job_title):
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=False)
-            page = browser.new_page()
-            page.goto("https://www.linkedin.com/in/raj-maurya-gcp-data-engineer/")
+            context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+            )
+            page = context.new_page()
+            page.goto("https://www.linkedin.com/login")
 
+            # Wait for login fields
+            page.wait_for_selector("input#username", timeout=10000)
+
+            # Perform login
             page.fill("input#username", self.username)
             page.fill("input#password", self.password)
             page.click("button[type='submit']")
 
-            page.wait_for_url("https://www.linkedin.com/feed/")
-            page.goto("https://www.linkedin.com/jobs")
-            page.fill("input[aria-label='Search jobs']", job_title)
+            # Add a wait for navigation
+            page.wait_for_load_state("networkidle")
+
+            # Navigate to job search
+            page.goto(f"https://www.linkedin.com/jobs/search/?keywords={job_title}")
+        # Continue with job application logic...
             page.keyboard.press("Enter")
-            page.wait_for_timeout(10000)
+            page.wait_for_timeout(50000)
 
             jobs = page.query_selector_all("ul.jobs-search__results-list li")
             for job in jobs[:3]:
@@ -32,3 +42,4 @@ class LinkedInBot:
                 modified_resume = self.resume_modifier.modify(job_desc)
                 self.job_logger.log(job_desc)
             browser.close()
+            
